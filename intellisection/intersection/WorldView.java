@@ -209,51 +209,22 @@ public class WorldView extends GridWorldView {
     }
 
     public void drawCrossing(Graphics g, int x, int y) {
-        g.setColor(Color.gray);
-        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
-        int[] vx = new int[4];
-        int[] vy = new int[4];
-        vx[0] = x * cellSizeW + (cellSizeW / 2);
-        vy[0] = y * cellSizeH;
-        vx[1] = (x + 1) * cellSizeW;
-        vy[1] = y * cellSizeH + (cellSizeH / 2);
-        vx[2] = x * cellSizeW + (cellSizeW / 2);
-        vy[2] = (y + 1) * cellSizeH;
-        vx[3] = x * cellSizeW;
-        vy[3] = y * cellSizeH + (cellSizeH / 2);
-        g.fillPolygon(vx, vy, 4);
+        g.setColor(Color.white);
+        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW/4, cellSizeH/4);
+		g.fillRect(x * cellSizeW, y * cellSizeH + 3*cellSizeH/4, cellSizeW/4, cellSizeH/4);
+		g.fillRect(x * cellSizeW + 3*cellSizeW/4, y * cellSizeH, cellSizeW/4, cellSizeH/4);
+		g.fillRect(x * cellSizeW + 3*cellSizeW/4, y * cellSizeH + 3*cellSizeH/4, cellSizeW/4, cellSizeH/4);
     }
 	
 	public void drawEmergency(Graphics g, int x, int y) {
-        g.setColor(Color.red);
-        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
-        int[] vx = new int[4];
-        int[] vy = new int[4];
-        vx[0] = x * cellSizeW + (cellSizeW / 2);
-        vy[0] = y * cellSizeH;
-        vx[1] = (x + 1) * cellSizeW;
-        vy[1] = y * cellSizeH + (cellSizeH / 2);
-        vx[2] = x * cellSizeW + (cellSizeW / 2);
-        vy[2] = (y + 1) * cellSizeH;
-        vx[3] = x * cellSizeW;
-        vy[3] = y * cellSizeH + (cellSizeH / 2);
-        g.fillPolygon(vx, vy, 4);
+        g.setColor(new Color(119, 121, 122, 60));
+        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
     }
 	
 	public void drawRoad(Graphics g, int x, int y) {
-        g.setColor(Color.green);
-        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
-        int[] vx = new int[4];
-        int[] vy = new int[4];
-        vx[0] = x * cellSizeW + (cellSizeW / 2);
-        vy[0] = y * cellSizeH;
-        vx[1] = (x + 1) * cellSizeW;
-        vy[1] = y * cellSizeH + (cellSizeH / 2);
-        vx[2] = x * cellSizeW + (cellSizeW / 2);
-        vy[2] = (y + 1) * cellSizeH;
-        vx[3] = x * cellSizeW;
-        vy[3] = y * cellSizeH + (cellSizeH / 2);
-        g.fillPolygon(vx, vy, 4);
+        g.setColor(new Color(217, 219, 221, 60));
+        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
+        
     }
 
     public static void main(String[] args) throws Exception {

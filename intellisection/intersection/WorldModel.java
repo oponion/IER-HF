@@ -97,7 +97,10 @@ public class WorldModel extends GridWorldModel {
     }
 
     static WorldModel world1() throws Exception {
-        WorldModel model = WorldModel.create(40, 40, 10);
+		int height = 40;
+		int width = 40;
+		int numOfAgents = 10;
+        WorldModel model = WorldModel.create(width, height, numOfAgents);
 		//Cars
 		model.setAgPos(0, 0, 10);
 		model.setAgPos(1, 1, 10);
@@ -115,6 +118,47 @@ public class WorldModel extends GridWorldModel {
 		//Ambulance
 		model.setAgPos(9, 9, 10);
 		AGENT_NUMS.put("ambulance", 1);
+		
+		for(int i = 0; i < height; ++i) {
+			model.add(WorldModel.ROAD, width/2-1, i);
+			model.add(WorldModel.ROAD, width/2, i);
+			if(i < height/2-1 || i > height/2) {
+				model.add(WorldModel.EMERGENCY_LANE, width/2-2, i);
+				model.add(WorldModel.EMERGENCY_LANE, width/2+1, i);
+			}
+		}
+		
+		for(int i = 0; i < width; ++i) {
+			model.add(WorldModel.ROAD, i, height/2-1);
+			model.add(WorldModel.ROAD, i, height/2);
+			if(i < width/2-1 || i > width/2) {
+				model.add(WorldModel.EMERGENCY_LANE, i, height/2-2);
+				model.add(WorldModel.EMERGENCY_LANE, i, height/2+1);
+			}
+		}
+		
+		for(int i = width/2-3; i <= width/2+2; ++i) {
+			model.add(WorldModel.PEDESTRIAN_CROSSING, i, height/2-3);
+			model.add(WorldModel.PEDESTRIAN_CROSSING, i, height/2+2);
+		}
+		
+		for(int i = height/2-3; i <= height/2+2; ++i) {
+			model.add(WorldModel.PEDESTRIAN_CROSSING, width/2-3, i);
+			model.add(WorldModel.PEDESTRIAN_CROSSING, width/2+2, i);
+		}
+		
+		for(int i = height/2-2; i <= height/2+1; ++i) {
+			for(int j = width/2-2; j <= width/2+1; ++j) {
+				model.add(WorldModel.BROADCAST_CELL, j, i);
+			}
+		}
+		
+		for(int i = height/2-1; i <= height/2; ++i) {
+			for(int j = width/2-1; j <= width/2; ++j) {
+				model.add(WorldModel.CRITICAL_CELL, j, i);
+			}
+		}
+		
         return model;
     }
 	
