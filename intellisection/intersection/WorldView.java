@@ -70,7 +70,7 @@ public class WorldView extends GridWorldView {
         jSpeed = new JSlider();
         jSpeed.setMinimum(0);
         jSpeed.setMaximum(400);
-        jSpeed.setValue(50);
+        jSpeed.setValue(1);
         jSpeed.setPaintTicks(true);
         jSpeed.setPaintLabels(true);
         jSpeed.setMajorTickSpacing(100);

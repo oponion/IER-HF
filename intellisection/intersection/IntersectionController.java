@@ -92,21 +92,25 @@ public class IntersectionController extends jason.environment.Environment {
             }
 
             // get the agent id based on its name
-            int agId = getAgIdBasedOnName(ag);
-
-            if (action.equals(north)) {
-                result = model.move(Move.NORTH, agId);
-            } else if (action.equals(south)) {
-                result = model.move(Move.SOUTH, agId);
-            } else if (action.equals(east)) {
-                result = model.move(Move.EAST, agId);
-            } else if (action.equals(west)) {
-                result = model.move(Move.WEST, agId);
+            //int agId = getAgIdBasedOnName(ag);
+			int agentId = 0;
+				
+            if (action.getFunctor().equals("move_towards")) {
+				String destination = action.getTerm(0).toString();
+				
+				try {
+					
+					result = model.moveTowards(destination, agentId);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
             } else {
                 logger.info("executing: " + action + ", but not implemented!");
             }
             if (result) {
-                updateAgPercept(agId);
+                //updateAgPercept(agId);
                 return true;
             }
         } catch (InterruptedException e) {
@@ -142,6 +146,7 @@ public class IntersectionController extends jason.environment.Environment {
 			if (hasGUI) {
 				view = new WorldView(model);
 				view.setEnv(this);
+				model.setView(view);
 			}
 			updateAgsPercept();
 			informAgsEnvironmentChanged();
