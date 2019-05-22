@@ -1,0 +1,33 @@
+/*
+    intellisection
+    ---------------------------
+
+    Jason Project File
+
+    This file defines the initial state of the MAS
+
+    Jason 
+    May 21, 2019 - 21:47:46
+*/
+
+MAS intellisection {
+
+    infrastructure: Centralised
+
+    agents:
+        pedestrian;
+
+        car;
+
+        ambulance;
+
+        driver;
+
+        car_traffic_light;
+
+        pedestrian_traffic_light;
+
+        central_control_unit;
+
+}
+
