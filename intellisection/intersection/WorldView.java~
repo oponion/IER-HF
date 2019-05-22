@@ -1,5 +1,3 @@
-package intersection;
-
 import jason.environment.grid.GridWorldView;
 
 import java.awt.BorderLayout;
@@ -13,7 +11,6 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.Hashtable;
-import java.util.HashMap;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -29,11 +26,9 @@ import javax.swing.event.ChangeListener;
 public class WorldView extends GridWorldView {
 
     IntersectionController env = null;
-	WorldModel model = null;
 
     public WorldView(WorldModel model) {
-        super(model, "Intellisection", 1000);
-		this.model = model;
+        super(model, "Intellisection", 600);
         setVisible(true);
         repaint();
     }
@@ -163,24 +158,11 @@ public class WorldView extends GridWorldView {
 
     @Override
     public void drawAgent(Graphics g, int x, int y, Color c, int id) {
-		if(id < model.AGENT_NUMS.get("car")) {
-			super.drawAgent(g, x, y, Color.blue, -1);
-			Color labelColor = Color.white;
-			g.setColor(labelColor);
-			drawString(g, x, y, defaultFont, "c");
-		}
-		else if(id < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
-			super.drawAgent(g, x, y, Color.green, -1);
-			Color labelColor = Color.white;
-			g.setColor(labelColor);
-			drawString(g, x, y, defaultFont, "p");
-		}
-		else {
-			super.drawAgent(g, x, y, Color.red, -1);
-			Color labelColor = Color.white;
-			g.setColor(labelColor);
-			drawString(g, x, y, defaultFont, "+");
-		}
+        Color idColor = Color.black;
+		super.drawAgent(g, x, y, c, -1);
+		idColor = Color.white;
+        g.setColor(idColor);
+        drawString(g, x, y, defaultFont, String.valueOf(id+1));
     }
 
     public void drawCritical(Graphics g, int x, int y) {

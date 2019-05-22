@@ -13,6 +13,8 @@
 MAS intellisection {
 
     infrastructure: Centralised
+	
+	environment: intersection.IntersectionController(3,50,yes)
 
     agents:
         pedestrian;

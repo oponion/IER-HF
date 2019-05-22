@@ -1,18 +1,12 @@
-package intersection;
-
 // Environment code for project jasonTeamSimLocal.mas2j
 
 import jason.asSyntax.Literal;
 import jason.asSyntax.Structure;
 import jason.asSyntax.Term;
 import jason.environment.grid.Location;
-import jason.mas2j.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.*;
-
-import java.io.FileInputStream;
 
 public class IntersectionController extends jason.environment.Environment {
 
@@ -44,29 +38,6 @@ public class IntersectionController extends jason.environment.Environment {
         hasGUI = args[2].equals("yes");
         sleep  = Integer.parseInt(args[1]);
         initWorld(Integer.parseInt(args[0]));
-		try {
-		  // parse that file
-		  jason.mas2j.parser.mas2j parser =
-			  new jason.mas2j.parser.mas2j(new FileInputStream(args[3]));
-		  MAS2JProject project = parser.mas();
-
-		  List<String> names = new ArrayList<String>();
-		  // get the names from the project
-		  for (AgentParameters ap : project.getAgents()) {
-			 String agName = ap.name;
-			 for (int cAg = 0; cAg < ap.getNbInstances(); cAg++) {
-				String numberedAg = agName;
-				if (ap.getNbInstances() > 1) {
-				   numberedAg += (cAg + 1);
-				}
-				names.add(numberedAg);
-			 }
-		  }
-		  logger.info("Agents' name: "+names);
-		} catch(Exception e) {
-			logger.warning("Error during init " + e);
-			e.printStackTrace();
-		}
     }
 
     public int getSimId() {
@@ -137,6 +108,7 @@ public class IntersectionController extends jason.environment.Environment {
                 logger.info("Invalid index!");
                 return;
 			}
+			model = WorldModel.world();
 			clearPercepts();
 			addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
 			if (hasGUI) {
@@ -147,7 +119,6 @@ public class IntersectionController extends jason.environment.Environment {
 			informAgsEnvironmentChanged();
         } catch (Exception e) {
             logger.warning("Error creating world "+e);
-			e.printStackTrace();
         }
     }
 
@@ -160,28 +131,18 @@ public class IntersectionController extends jason.environment.Environment {
 
     private void updateAgsPercept() {
         for (int i = 0; i < model.getNbOfAgs(); i++) {
-			logger.info("agent: " + i);
             updateAgPercept(i);
         }
     }
 
     private void updateAgPercept(int ag) {
-		if (ag < model.AGENT_NUMS.get("car")) {
-			updateAgPercept("car" + (ag + 1), ag);
-		}
-		else if(ag < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
-			updateAgPercept("pedestrian" + (ag + 1), ag);
-		}
-		else {
-			updateAgPercept("ambulance", ag);
-		}
+        updateAgPercept("miner" + (ag + 1), ag);
     }
 
     private void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
         // its location
         Location l = model.getAgPos(ag);
-		logger.info(agName);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
 
         // what's around
