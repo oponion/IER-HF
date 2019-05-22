@@ -1,3 +1,5 @@
+package intersection;
+
 import jason.environment.grid.GridWorldModel;
 import jason.environment.grid.Location;
 

@@ -1,3 +1,5 @@
+package intersection;
+
 // Environment code for project jasonTeamSimLocal.mas2j
 
 import jason.asSyntax.Literal;

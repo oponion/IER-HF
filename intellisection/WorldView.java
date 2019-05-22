@@ -20,6 +20,7 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JButton;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -89,7 +90,6 @@ public class WorldView extends GridWorldView {
         msg.setBorder(BorderFactory.createEtchedBorder());
 
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("Click on the cells to add new pieces of gold."));
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
         p.add(new JLabel("(mouse at:"));
@@ -97,7 +97,6 @@ public class WorldView extends GridWorldView {
         p.add(jlMouseLoc);
         msg.add(p);
         p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("Collected golds:"));
         jGoldsC = new JLabel("0");
         p.add(jGoldsC);
         msg.add(p);
@@ -220,7 +219,7 @@ public class WorldView extends GridWorldView {
     }
 
     public static void main(String[] args) throws Exception {
-        MiningPlanet env = new MiningPlanet();
+        IntersectionController env = new IntersectionController();
         env.init(new String[] {"5","50","yes"});
     }
 }

@@ -1,3 +1,5 @@
+package intersection;
+
 import jason.environment.grid.GridWorldView;
 
 import java.awt.BorderLayout;
