@@ -5,7 +5,7 @@ going_towards_intersection.
 
 /* Initial goals */
 
-!ask_driver.
+//!ask_driver.
 !at(car,traffic_light).
 
 /* Plans */
@@ -29,4 +29,10 @@ going_towards_intersection.
 	<- .my_name(N);
 	   utils.get_driver_name(N,D);
 	   +my_driver(D);
-	   .print(hello ,D).
+	   .send(D, achieve, tell_destination(N)).
+
+/*+route(Source, Dest)
+	: true
+	<- .print(goingFROM, Source, Dest);
+	   +my_source(Source);
+	   +my_dest(Dest).*/

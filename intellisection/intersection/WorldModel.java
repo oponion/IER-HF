@@ -25,6 +25,8 @@ public class WorldModel extends GridWorldModel {
 	
 	// holds location based on x coord.
 	static HashMap<Integer, Location> trafficLightLocations = new HashMap();
+	
+	static HashMap<Integer, IntersectionController.Move[]> sourceDestMap = new HashMap();
 
     private Logger            logger   = Logger.getLogger("intellisection.mas2j." + WorldModel.class.getName());
 
@@ -135,6 +137,18 @@ public class WorldModel extends GridWorldModel {
         }
         return true;
     }
+	
+	static String getTypeFromId(int agentId) {
+		if(agentId < model.AGENT_NUMS.get("car")) {
+			return "car";
+		}
+		else if(agentId < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
+			return "pedestrian";
+		}
+		else {
+			return "ambulance";
+		}
+	}
 
     static WorldModel world1() throws Exception {
 		int height = 40;
@@ -143,6 +157,10 @@ public class WorldModel extends GridWorldModel {
         WorldModel model = WorldModel.create(width, height, numOfAgents);
 		//Cars
 		model.setAgPos(0, 19, 0);
+		
+		IntersectionController.Move[] path = {IntersectionController.Move.NORTH, IntersectionController.Move.SOUTH};
+		sourceDestMap.put(0, path);
+		
 		/*model.setAgPos(1, 1, 10);
 		model.setAgPos(2, 2, 10);
 		model.setAgPos(3, 3, 10);

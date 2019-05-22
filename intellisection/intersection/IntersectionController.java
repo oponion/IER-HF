@@ -38,6 +38,8 @@ public class IntersectionController extends jason.environment.Environment {
     public enum Move {
         NORTH, SOUTH, EAST, WEST
     };
+	
+	
 
     @Override
     public void init(String[] args) {
@@ -92,8 +94,7 @@ public class IntersectionController extends jason.environment.Environment {
             }
 
             // get the agent id based on its name
-            //int agId = getAgIdBasedOnName(ag);
-			int agentId = 0;
+			int agentId = getAgIdBasedOnName(ag);
 				
             if (action.getFunctor().equals("move_towards")) {
 				String destination = action.getTerm(0).toString();
@@ -110,7 +111,7 @@ public class IntersectionController extends jason.environment.Environment {
                 logger.info("executing: " + action + ", but not implemented!");
             }
             if (result) {
-                //updateAgPercept(agId);
+                updateAgPercept(agentId);
                 return true;
             }
         } catch (InterruptedException e) {
@@ -121,6 +122,19 @@ public class IntersectionController extends jason.environment.Environment {
     }
 
     private int getAgIdBasedOnName(String agName) {
+		
+		if (agName.startsWith("car")) {
+			return 0;
+			//return Integer.parseInt(agName.substring(3, agName.length()));
+		}
+		if (agName.startsWith("ambulance")) {
+			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian");
+		}
+		if (agName.startsWith("pedestrian")) {
+			return Integer.parseInt(agName.substring(10, agName.length()));
+		}
+		
+		
         return (Integer.parseInt(agName.substring(5))) - 1;
     }
 
@@ -172,7 +186,7 @@ public class IntersectionController extends jason.environment.Environment {
 
     private void updateAgPercept(int ag) {
 		if (ag < model.AGENT_NUMS.get("car")) {
-			updateAgPercept("car" + (ag + 1), ag);
+			updateAgPercept("car"/* + (ag + 1)*/, ag);
 		}
 		else if(ag < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
 			updateAgPercept("pedestrian" + (ag + 1), ag);
@@ -199,6 +213,12 @@ public class IntersectionController extends jason.environment.Environment {
         updateAgPercept(agName, l.x + 1, l.y - 1);
         updateAgPercept(agName, l.x + 1, l.y);
         updateAgPercept(agName, l.x + 1, l.y + 1);
+		
+		
+		Move source = model.sourceDestMap.get(ag)[0];
+		Move dest = model.sourceDestMap.get(ag)[1];
+		addPercept(agName, Literal.parseLiteral("route(" + source + "," + dest + ")"));
+		
     }
 
 
