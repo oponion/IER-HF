@@ -116,7 +116,6 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(9, 9, 10);
 		AGENT_NUMS.put("ambulance", 1);
 		
-		for 
         return model;
     }
 	
