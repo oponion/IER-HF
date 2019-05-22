@@ -5,6 +5,7 @@ going_towards_intersection.
 
 /* Initial goals */
 
+!ask_driver.
 !at(car,traffic_light).
 
 /* Plans */
@@ -22,4 +23,10 @@ going_towards_intersection.
 +!at(car,P) : not at(car,P)
 	<- move_towards(P);
 	   !at(car,P).
-
+	   
++!ask_driver
+	: true
+	<- .my_name(N);
+	   utils.get_driver_name(N,D);
+	   +my_driver(D);
+	   .print(hello ,D).

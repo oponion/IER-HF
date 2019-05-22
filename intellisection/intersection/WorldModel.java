@@ -102,9 +102,9 @@ public class WorldModel extends GridWorldModel {
 		
 		// repaint
         if (view != null) {
-			view.repaint();
-            /*view.update(oldLocation.x, oldLocation.y);
-            view.update(agentLocation.x, agentLocation.y);*/
+			//view.repaint();
+            view.update(oldLocation.x, oldLocation.y);
+            view.update(agentLocation.x, agentLocation.y);
         }
         return true;
 	}
