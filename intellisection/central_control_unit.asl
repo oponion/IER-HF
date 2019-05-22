@@ -2,11 +2,29 @@
 
 /* Initial beliefs and rules */
 
+green(west_east).
+
 /* Initial goals */
 
-!start.
+!seamless_traffic.
 
 /* Plans */
 
-+!start : true <- .print("hello world.").
++!seamless_traffic
+	: green(west_east)
+	<- .wait(1000);
+	   .broadcast(tell,green(south_north));
+	   .print(green_south_north);
+	   -+green(south_north);
+	   !seamless_traffic.
+	   
++!seamless_traffic
+	: green(south_north)
+	<- .wait(1000);
+	   .broadcast(tell,green(west_east));
+	   .print(green_west_east);
+	   -+green(west_east);
+	   !seamless_traffic.
+
+//+!congestion_control
 

@@ -19,15 +19,11 @@ MAS intellisection {
     agents:
         pedestrian;
 
-        car;
+        car#2;
 
         ambulance;
 
         driver;
-
-        car_traffic_light;
-
-        pedestrian_traffic_light;
 
         central_control_unit;
 

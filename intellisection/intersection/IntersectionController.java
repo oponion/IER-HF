@@ -124,14 +124,14 @@ public class IntersectionController extends jason.environment.Environment {
     private int getAgIdBasedOnName(String agName) {
 		
 		if (agName.startsWith("car")) {
-			return 0;
-			//return Integer.parseInt(agName.substring(3, agName.length()));
+			//return 0;
+			return Integer.parseInt(agName.substring(3, agName.length())) - 1;
 		}
 		if (agName.startsWith("ambulance")) {
-			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian");
+			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian") - 1;
 		}
 		if (agName.startsWith("pedestrian")) {
-			return Integer.parseInt(agName.substring(10, agName.length()));
+			return Integer.parseInt(agName.substring(10, agName.length())) - 1;
 		}
 		
 		
@@ -179,14 +179,13 @@ public class IntersectionController extends jason.environment.Environment {
 
     private void updateAgsPercept() {
         for (int i = 0; i < model.getNbOfAgs(); i++) {
-			logger.info("agent: " + i);
             updateAgPercept(i);
         }
     }
 
     private void updateAgPercept(int ag) {
 		if (ag < model.AGENT_NUMS.get("car")) {
-			updateAgPercept("car"/* + (ag + 1)*/, ag);
+			updateAgPercept("car" + (ag + 1), ag);
 		}
 		else if(ag < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
 			updateAgPercept("pedestrian" + (ag + 1), ag);
@@ -200,7 +199,6 @@ public class IntersectionController extends jason.environment.Environment {
         clearPercepts(agName);
         // its location
         Location l = model.getAgPos(ag);
-		logger.info(agName);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
 
         // what's around

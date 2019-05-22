@@ -24,7 +24,7 @@ public class WorldModel extends GridWorldModel {
 	Location broadcastArea;
 	
 	// holds location based on x coord.
-	static HashMap<Integer, Location> trafficLightLocations = new HashMap();
+	static HashMap<IntersectionController.Move, Location> trafficLightLocations = new HashMap();
 	
 	static HashMap<Integer, IntersectionController.Move[]> sourceDestMap = new HashMap();
 
@@ -82,7 +82,18 @@ public class WorldModel extends GridWorldModel {
 		
 		Location dest = null;
 		if (destName.equals("traffic_light")) {
-			dest = trafficLightLocations.get(agentLocation.x);
+			int minDistance = Integer.MAX_VALUE;
+			Location closestLight = null;
+			
+			for(IntersectionController.Move key : trafficLightLocations.keySet()) {
+				int distance = trafficLightLocations.get(key).distance(agentLocation);
+				if(distance < minDistance) {
+					minDistance = distance;
+					closestLight = trafficLightLocations.get(key);
+				}
+			}
+				
+			dest = closestLight;
 		}
 		
 		if (dest == null) {
@@ -153,13 +164,16 @@ public class WorldModel extends GridWorldModel {
     static WorldModel world1() throws Exception {
 		int height = 40;
 		int width = 40;
-		int numOfAgents = 1;
+		int numOfAgents = 2;
         WorldModel model = WorldModel.create(width, height, numOfAgents);
 		//Cars
 		model.setAgPos(0, 19, 0);
+		model.setAgPos(1, 39, 19);
 		
-		IntersectionController.Move[] path = {IntersectionController.Move.NORTH, IntersectionController.Move.SOUTH};
-		sourceDestMap.put(0, path);
+		IntersectionController.Move[] path0 = {IntersectionController.Move.NORTH, IntersectionController.Move.SOUTH};
+		sourceDestMap.put(0, path0);
+		IntersectionController.Move[] path1 = {IntersectionController.Move.EAST, IntersectionController.Move.WEST};
+		sourceDestMap.put(1, path1);
 		
 		/*model.setAgPos(1, 1, 10);
 		model.setAgPos(2, 2, 10);
@@ -167,7 +181,7 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(4, 4, 10);
 		model.setAgPos(5, 5, 10);*/
 		AGENT_NUMS = new HashMap<>();
-		AGENT_NUMS.put("car", 1);
+		AGENT_NUMS.put("car", 2);
 		//Pedestrians
 		/*model.setAgPos(6, 6, 10);
 		model.setAgPos(7, 7, 10);
@@ -219,10 +233,10 @@ public class WorldModel extends GridWorldModel {
 		
 		//init trafficlight locations
 		
-		trafficLightLocations.put(23, new Location(23, 19));
-		trafficLightLocations.put(20, new Location(20, 23));
-		trafficLightLocations.put(16, new Location(16, 20));
-		trafficLightLocations.put(19, new Location(19, 16));
+		trafficLightLocations.put(IntersectionController.Move.EAST, new Location(23, 19));
+		trafficLightLocations.put(IntersectionController.Move.SOUTH, new Location(20, 23));
+		trafficLightLocations.put(IntersectionController.Move.WEST, new Location(16, 20));
+		trafficLightLocations.put(IntersectionController.Move.NORTH, new Location(19, 16));
 		
         return model;
     }
