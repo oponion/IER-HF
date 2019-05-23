@@ -252,6 +252,12 @@ public class IntersectionController extends jason.environment.Environment {
 			Location trafficLightLocation = model.getTrafficLightLocation(l);
 			addPercept(agName, Literal.parseLiteral("traffic_light_pos(" + trafficLightLocation.x + "," + trafficLightLocation.y + ")"));
 		}
+		
+		if(model.getTypeFromId(ag).equals("ambulance")) {
+			if(model.hasObject(WorldModel.AGENT, l.x - 1, l.y)) {
+				addPercept(getAgentNameById(model.getAgAtPos(l.x - 1, l.y)), Literal.parseLiteral("ambulance_behind"));
+			}
+		}
     }
 
 

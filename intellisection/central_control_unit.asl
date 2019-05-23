@@ -19,7 +19,7 @@ green(west_east).
 	<- .broadcast(untell,green(west_east));
 	   .broadcast(tell,green(south_north));
 	   .print(green_south_north);
-	   .wait(3000);
+	   .wait(6000);
 	   -last_green(west_east);
 	   -+green(south_north);
 	   !seamless_traffic.
@@ -30,7 +30,7 @@ green(west_east).
 	<- .broadcast(untell,green(south_north));
 	   .broadcast(tell,green(west_east));
 	   .print(green_west_east);
-	   .wait(3000);
+	   .wait(6000);
 	   -last_green(south_north);
 	   -+green(west_east);
 	   !seamless_traffic.

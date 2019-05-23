@@ -8,19 +8,9 @@ going_towards_traffic_light.
 
 /* Initial goals */
 
-//!ask_driver.
 !go_to_traffic_light.
 
 /* Plans */
-
-/*+!start : true
-	<- ?my_pos(X, Y);
-	   utils.get_source_direction(X,Y,D).*/
-	   
-
-/*+my_pos(X,Y)
-	: going_towards_intersection
-	<- step_towards_traffic_light(X, Y).*/
 
 +!go_to_traffic_light
 	: true
@@ -43,12 +33,14 @@ going_towards_traffic_light.
 	   !at(car,P).
 	   
 +!wait_for_green
-	:   not (green(D) & my_source(S) & .substring(S,D))
-	<-  !wait_for_green.
+	:   not (green(D) & my_source(S) & .substring(S,D)) & not ambulance_behind
+	<-	+waiting_for_green;
+		!wait_for_green.
 	
 +!wait_for_green
 	:	green(D) & my_source(S) & .substring(S,D)
-	<-	!go_to_destination.
+	<-	-waiting_for_green;
+		!go_to_destination.
 	
 +!go_to_destination
 	:	true
@@ -61,12 +53,6 @@ going_towards_traffic_light.
 	   utils.get_driver_name(N,D);
 	   +my_driver(D);
 	   .send(D, achieve, tell_destination(N)).
-	   
-/*+!tell_central_unit
-	: 	true
-	<-	.my_name(N);
-		.print(iNSIDEYEAH);
-		.send(central_control_unit,tell,inside(N)).*/
 		
 +danger_zone
 	: 	true
@@ -78,11 +64,6 @@ going_towards_traffic_light.
 	<-	.my_name(N);
 		.send(central_control_unit,untell,inside(N)).
 		
-/*+!untell_central_unit
-	: 	true
-	<-	.my_name(N);
-		.send(central_control_unit,untell,inside(N)).
-*/
 +route(Source, Dest)
 	: true
 	<- +my_source(Source);
@@ -105,22 +86,14 @@ going_towards_traffic_light.
 		move_to(U,V);
 		.my_name(N);
 		.print(N,_tried_move_to,U,_V);
-		//!move_back.
 		!continue.
 		
 -!continue
 	:	true
 	<-	!continue.
-/*		
-+!move_back
-	:	last_position(U,V)
-	<-	move_to(U,V);
-		.my_name(N);
-		.print(N,_tried_move_to,U,_V);
-		!continue.
-*/	
+
 +!continue
-	:	last_position(X,Y) & pos(X,Y) & going_towards_traffic_light
+	:	last_position(X,Y) & pos(X,Y) & (going_towards_traffic_light | waiting_for_green)
 	<-	-last_position(_,_);
 		!go_to_traffic_light.
 		
