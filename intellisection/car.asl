@@ -1,12 +1,13 @@
 // Agent car in project intellisection.mas2j
 
 /* Initial beliefs and rules */
-going_towards_intersection.
+
+going_towards_traffic_light.
 
 /* Initial goals */
 
 //!ask_driver.
-!at(car,traffic_light).
+!go_to_traffic_light.
 
 /* Plans */
 
@@ -19,10 +20,34 @@ going_towards_intersection.
 	: going_towards_intersection
 	<- step_towards_traffic_light(X, Y).*/
 
-+!at(car,P) : at(car,P) <- true.
++!go_to_traffic_light
+	: true
+	<- +going_towards_traffic_light;
+	   !at(car,traffic_light).
+	
++!at(car,P)
+	: 	pos(X,Y) & traffic_light_pos(X,Y) & going_towards_traffic_light
+	<- 	.print(reached_traffic_light);
+		-going_towards_traffic_light;
+		!wait_for_green.
+
 +!at(car,P) : not at(car,P)
 	<- move_towards(P);
 	   !at(car,P).
+	   
++!wait_for_green
+	:   not (green(D) & my_source(S) & .substring(S,D))
+	<-  !wait_for_green.
+	
++!wait_for_green
+	:	green(D) & my_source(S) & .substring(S,D)
+	<-	!go_to_destination.
+	
++!go_to_destination
+	:	true
+	<-	+going_towards_destination;
+		.print(going_to_destination);
+		!at(car,destination).
 	   
 +!ask_driver
 	: true
@@ -31,8 +56,9 @@ going_towards_intersection.
 	   +my_driver(D);
 	   .send(D, achieve, tell_destination(N)).
 
-/*+route(Source, Dest)
++route(Source, Dest)
 	: true
-	<- .print(goingFROM, Source, Dest);
-	   +my_source(Source);
-	   +my_dest(Dest).*/
+	<- +my_source(Source);
+	   +my_dest(Dest).
+
+

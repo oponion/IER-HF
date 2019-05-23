@@ -212,10 +212,14 @@ public class IntersectionController extends jason.environment.Environment {
         updateAgPercept(agName, l.x + 1, l.y);
         updateAgPercept(agName, l.x + 1, l.y + 1);
 		
-		
-		Move source = model.sourceDestMap.get(ag)[0];
-		Move dest = model.sourceDestMap.get(ag)[1];
+		String source = model.sourceDestMap.get(ag)[0].toString().toLowerCase();
+		String dest = model.sourceDestMap.get(ag)[1].toString().toLowerCase();
 		addPercept(agName, Literal.parseLiteral("route(" + source + "," + dest + ")"));
+		
+		if(model.getTypeFromId(ag).equals("car")) {
+			Location trafficLightLocation = model.getTrafficLightLocation(l);
+			addPercept(agName, Literal.parseLiteral("traffic_light_pos(" + trafficLightLocation.x + "," + trafficLightLocation.y + ")"));
+		}
 		
     }
 

@@ -71,6 +71,34 @@ public class WorldModel extends GridWorldModel {
 	public Location getBroadcastArea() {
         return broadcastArea;
     }
+	
+	public Location getTrafficLightLocation(Location agentLocation) {
+		int minDistance = Integer.MAX_VALUE;
+		Location closestLight = null;
+		
+		for(IntersectionController.Move key : trafficLightLocations.keySet()) {
+			int distance = trafficLightLocations.get(key).distance(agentLocation);
+			if(distance < minDistance) {
+				minDistance = distance;
+				closestLight = trafficLightLocations.get(key);
+			}
+		}
+		return closestLight;
+	}
+	
+	public Location getDestinationLocation(int agentId) {
+		switch(sourceDestMap.get(agentId)[1]) {
+			case NORTH:
+				return new Location(20, 0);
+			case EAST:
+				return new Location(39, 20);
+			case SOUTH:
+				return new Location(19, 39);
+			case WEST:
+				return new Location(0, 19);
+		}
+		return null;
+	}
 
     /** Actions **/
 	
@@ -78,22 +106,13 @@ public class WorldModel extends GridWorldModel {
 		Location agentLocation = getAgPos(agId);
 		Location oldLocation = agentLocation;
 		
-		logger.info(agentLocation.x + " " + agentLocation.y);
-		
 		Location dest = null;
 		if (destName.equals("traffic_light")) {
-			int minDistance = Integer.MAX_VALUE;
-			Location closestLight = null;
-			
-			for(IntersectionController.Move key : trafficLightLocations.keySet()) {
-				int distance = trafficLightLocations.get(key).distance(agentLocation);
-				if(distance < minDistance) {
-					minDistance = distance;
-					closestLight = trafficLightLocations.get(key);
-				}
-			}
-				
-			dest = closestLight;
+			dest = getTrafficLightLocation(agentLocation);
+		}
+		
+		if (destName.equals("destination")) {
+			dest = getDestinationLocation(agId);
 		}
 		
 		if (dest == null) {
