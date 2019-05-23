@@ -123,7 +123,6 @@ public class WorldModel extends GridWorldModel {
 			}
 		}
 		else if(getTypeFromId(agentId).equals("pedestrian")) {
-			logger.warning("PEDESTRIAN");
 			switch(sourceDestMap.get(agentId)[1]) {
 			case NORTH:
 				return new Location(17, -100);

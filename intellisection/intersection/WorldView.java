@@ -176,10 +176,10 @@ public class WorldView extends GridWorldView {
 			drawString(g, x, y, defaultFont, "c" + (id + 1));
 		}
 		else if(id < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
-			super.drawAgent(g, x, y, Color.green, -1);
+			super.drawAgent(g, x, y, Color.black, -1);
 			Color labelColor = Color.white;
 			g.setColor(labelColor);
-			drawString(g, x, y, defaultFont, "p");
+			drawString(g, x, y, defaultFont, "p" + (id - model.AGENT_NUMS.get("car") + 1));
 		}
 		else {
 			super.drawAgent(g, x, y, Color.red, -1);
@@ -215,7 +215,7 @@ public class WorldView extends GridWorldView {
     }
 
     public void drawCrossing(Graphics g, int x, int y) {
-        g.setColor(Color.white);
+        g.setColor(Color.black);
         g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW/4, cellSizeH/4);
 		g.fillRect(x * cellSizeW, y * cellSizeH + 3*cellSizeH/4, cellSizeW/4, cellSizeH/4);
 		g.fillRect(x * cellSizeW + 3*cellSizeW/4, y * cellSizeH, cellSizeW/4, cellSizeH/4);

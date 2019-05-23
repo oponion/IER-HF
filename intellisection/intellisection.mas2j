@@ -17,7 +17,7 @@ MAS intellisection {
 	environment: intersection.IntersectionController(1,50,yes,"intellisection.mas2j")
 
     agents:
-        pedestrian;
+        pedestrian#4;
 
         car#20;
 

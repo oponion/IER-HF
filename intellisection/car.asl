@@ -47,13 +47,6 @@ going_towards_traffic_light.
 	<-	+going_towards_destination;
 		!at(car,destination).
 	   
-+!ask_driver
-	: true
-	<- .my_name(N);
-	   utils.get_driver_name(N,D);
-	   +my_driver(D);
-	   .send(D, achieve, tell_destination(N)).
-		
 +danger_zone
 	: 	true
 	<-	.my_name(N);

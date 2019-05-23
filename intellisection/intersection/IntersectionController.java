@@ -171,7 +171,7 @@ public class IntersectionController extends jason.environment.Environment {
 			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian");
 		}
 		if (agName.startsWith("pedestrian")) {
-			return Integer.parseInt(agName.substring(10, agName.length())) - 1;
+			return Integer.parseInt(agName.substring(10, agName.length())) + model.AGENT_NUMS.get("car") - 1;
 		}
 		return -1;
     }
@@ -226,7 +226,7 @@ public class IntersectionController extends jason.environment.Environment {
 			return "car" + (id + 1);
 		}
 		else if(id < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
-			return "pedestrian" + (id + 1);
+			return "pedestrian" + (id - model.AGENT_NUMS.get("car")+ 1);
 		}
 		else {
 			return "ambulance";
