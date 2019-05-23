@@ -118,8 +118,30 @@ public class WorldModel extends GridWorldModel {
 		if (dest == null) {
 			return false;
 		}
+		try{
+			
+			if(dest.y == agentLocation.y) {
+				if(dest.x - agentLocation.x > 0) {
+					move(Move.EAST, agId);
+				}
+				else {
+					move(Move.WEST, agId);
+				}
+			}
+			else {
+				if(dest.y - agentLocation.y > 0) {
+					move(Move.SOUTH, agId);
+				}
+				else {
+					move(Move.NORTH, agId);
+				}
+			}
+		} catch(Exception e) {
+			logger.warning("Error during move: " + e);
+			e.printStackTrace();
+		}
 		
-		if (agentLocation.x < dest.x) {
+		/*if (agentLocation.x < dest.x) {
 			agentLocation.x++;
 		} else if (agentLocation.x > dest.x) {
 			agentLocation.x--;
@@ -130,7 +152,7 @@ public class WorldModel extends GridWorldModel {
 			agentLocation.y--;
 		}
 		
-		setAgPos(agId, agentLocation);
+		setAgPos(agId, agentLocation);*/
 		
 		// repaint
         if (view != null) {
@@ -183,16 +205,31 @@ public class WorldModel extends GridWorldModel {
     static WorldModel world1() throws Exception {
 		int height = 40;
 		int width = 40;
-		int numOfAgents = 2;
+		int numOfAgents = 10;
         WorldModel model = WorldModel.create(width, height, numOfAgents);
 		//Cars
 		model.setAgPos(0, 19, 0);
 		model.setAgPos(1, 39, 19);
+		model.setAgPos(2, 19, 1);
+		model.setAgPos(3, 38, 19);
+		model.setAgPos(4, 19, 3);
+		model.setAgPos(5, 37, 19);
+		model.setAgPos(6, 19, 4);
+		model.setAgPos(7, 35, 19);
+		model.setAgPos(8, 19, 6);
+		model.setAgPos(9, 31, 19);
 		
 		IntersectionController.Move[] path0 = {IntersectionController.Move.NORTH, IntersectionController.Move.SOUTH};
-		sourceDestMap.put(0, path0);
 		IntersectionController.Move[] path1 = {IntersectionController.Move.EAST, IntersectionController.Move.WEST};
-		sourceDestMap.put(1, path1);
+		
+		for(int i = 0; i < 10; ++i) {
+			if(i % 2 == 0) {
+				sourceDestMap.put(i, path0);
+			}
+			else {
+				sourceDestMap.put(i, path1);
+			}
+		}
 		
 		/*model.setAgPos(1, 1, 10);
 		model.setAgPos(2, 2, 10);
@@ -200,7 +237,7 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(4, 4, 10);
 		model.setAgPos(5, 5, 10);*/
 		AGENT_NUMS = new HashMap<>();
-		AGENT_NUMS.put("car", 2);
+		AGENT_NUMS.put("car", 10);
 		//Pedestrians
 		/*model.setAgPos(6, 6, 10);
 		model.setAgPos(7, 7, 10);

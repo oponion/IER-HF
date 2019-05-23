@@ -2,6 +2,9 @@
 
 /* Initial beliefs and rules */
 
+//TODO megjegyezni, hogy elozo lepesben bent volt-e, es attol fuggoen dumalni a central_control_unitnak
+inside :- pos(X,Y) & cell(X,Y,broadcast).
+
 going_towards_traffic_light.
 
 /* Initial goals */
@@ -31,8 +34,14 @@ going_towards_traffic_light.
 		-going_towards_traffic_light;
 		!wait_for_green.
 
-+!at(car,P) : not at(car,P)
++!at(car,P) : not at(car,P) & not inside
+	<- 	!untell_central_unit;
+		move_towards(P);
+		!at(car,P).
+	   
++!at(car,P) : not at(car,P) & inside
 	<- move_towards(P);
+	   !tell_central_unit;
 	   !at(car,P).
 	   
 +!wait_for_green
@@ -55,6 +64,17 @@ going_towards_traffic_light.
 	   utils.get_driver_name(N,D);
 	   +my_driver(D);
 	   .send(D, achieve, tell_destination(N)).
+	   
++!tell_central_unit
+	: 	true
+	<-	.my_name(N);
+		.print(iNSIDEYEAH);
+		.send(central_control_unit,tell,inside(N)).
+		
++!untell_central_unit
+	: 	true
+	<-	.my_name(N);
+		.send(central_control_unit,untell,inside(N)).
 
 +route(Source, Dest)
 	: true
