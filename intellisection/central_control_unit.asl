@@ -39,7 +39,6 @@ green(west_east).
 	: 	not nobody_inside & (green(D) | last_green(D))
 	<-	.broadcast(untell,green(south_north));
 		.broadcast(untell,green(west_east));
-		.print(waiting_for_empty);
 		-green(south_north);
 		-green(west_east);
 		+last_green(D);

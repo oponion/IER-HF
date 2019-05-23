@@ -4,9 +4,14 @@
 
 /* Initial goals */
 
-!start.
+!go_to_hospital.
 
 /* Plans */
 
-+!start : true <- .print("hello world.").
++!go_to_hospital
+	:	true
+	<-	?pos(X,Y);
+		.send(central_control_unit,tell,ambulance_pos(X,Y));
+		move_towards(hospital);
+		!go_to_hospital.
 

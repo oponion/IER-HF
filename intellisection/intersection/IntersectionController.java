@@ -111,7 +111,7 @@ public class IntersectionController extends jason.environment.Environment {
                 logger.info("executing: " + action + ", but not implemented!");
             }
             if (result) {
-                updateAgPercept(agentId);
+                updateAgPercept(getAgentNameById(agentId), agentId);
                 return true;
             }
         } catch (InterruptedException e) {
@@ -128,14 +128,12 @@ public class IntersectionController extends jason.environment.Environment {
 			return Integer.parseInt(agName.substring(3, agName.length())) - 1;
 		}
 		if (agName.startsWith("ambulance")) {
-			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian") - 1;
+			return model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian");
 		}
 		if (agName.startsWith("pedestrian")) {
 			return Integer.parseInt(agName.substring(10, agName.length())) - 1;
 		}
-		
-		
-        return (Integer.parseInt(agName.substring(5))) - 1;
+		return -1;
     }
 
     public void initWorld(int w) {
@@ -179,21 +177,21 @@ public class IntersectionController extends jason.environment.Environment {
 
     private void updateAgsPercept() {
         for (int i = 0; i < model.getNbOfAgs(); i++) {
-            updateAgPercept(i);
+            updateAgPercept(getAgentNameById(i), i);
         }
     }
-
-    private void updateAgPercept(int ag) {
-		if (ag < model.AGENT_NUMS.get("car")) {
-			updateAgPercept("car" + (ag + 1), ag);
+	
+	private String getAgentNameById(int id) {
+		if (id < model.AGENT_NUMS.get("car")) {
+			return "car" + (id + 1);
 		}
-		else if(ag < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
-			updateAgPercept("pedestrian" + (ag + 1), ag);
+		else if(id < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
+			return "pedestrian" + (id + 1);
 		}
 		else {
-			updateAgPercept("ambulance", ag);
+			return "ambulance";
 		}
-    }
+	}
 
     private void updateAgPercept(String agName, int ag) {
         clearPercepts(agName);
@@ -211,25 +209,28 @@ public class IntersectionController extends jason.environment.Environment {
 				updateAgPercept(agName, l.x, l.y - 1);		// ^
 				updateAgPercept(agName, l.x, l.y);			// o
 				updateAgPercept(agName, l.x + 1, l.y);		// >
+				updateAgPercept(agName, l.x, l.y + 1);		// ˇ
 			case "east":
 				updateAgPercept(agName, l.x, l.y);			// o
 				updateAgPercept(agName, l.x + 1, l.y);		// >
 				updateAgPercept(agName, l.x, l.y + 1);		// ˇ
+				updateAgPercept(agName, l.x - 1, l.y);		// <
 			case "south":
 				updateAgPercept(agName, l.x, l.y);			// o
 				updateAgPercept(agName, l.x, l.y + 1);		// ˇ
 				updateAgPercept(agName, l.x - 1, l.y);		// <
+				updateAgPercept(agName, l.x, l.y - 1);		// ^
 			case "west":
 				updateAgPercept(agName, l.x, l.y);			// o
 				updateAgPercept(agName, l.x, l.y - 1);		// ^
 				updateAgPercept(agName, l.x - 1, l.y);		// <
+				updateAgPercept(agName, l.x + 1, l.y);		// >
 		}
 		
 		if(model.getTypeFromId(ag).equals("car")) {
 			Location trafficLightLocation = model.getTrafficLightLocation(l);
 			addPercept(agName, Literal.parseLiteral("traffic_light_pos(" + trafficLightLocation.x + "," + trafficLightLocation.y + ")"));
 		}
-		
     }
 
 
@@ -242,7 +243,12 @@ public class IntersectionController extends jason.environment.Environment {
 			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",broadcast)"));
 		}
 		if (model.hasObject(WorldModel.AGENT, x, y)) {
-			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",agent)"));
+			if(getAgentNameById(model.getAgAtPos(x, y)).equals("ambulance")) {
+				addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",ambulance)"));
+			}
+			else {
+				addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",agent)"));
+			}
 		}
 		if (model.hasObject(WorldModel.PEDESTRIAN_CROSSING, x, y)) {
 			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",crossing)"));

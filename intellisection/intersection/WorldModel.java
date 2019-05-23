@@ -115,6 +115,10 @@ public class WorldModel extends GridWorldModel {
 			dest = getDestinationLocation(agId);
 		}
 		
+		if (destName.equals("hospital")) {
+			dest = new Location(0, 19);
+		}
+		
 		if (dest == null) {
 			return false;
 		}
@@ -205,31 +209,71 @@ public class WorldModel extends GridWorldModel {
     static WorldModel world1() throws Exception {
 		int height = 40;
 		int width = 40;
-		int numOfAgents = 10;
+		int numOfAgents = 21;
         WorldModel model = WorldModel.create(width, height, numOfAgents);
 		//Cars
-		model.setAgPos(0, 19, 0);
-		model.setAgPos(1, 39, 19);
-		model.setAgPos(2, 19, 1);
-		model.setAgPos(3, 38, 19);
-		model.setAgPos(4, 19, 3);
-		model.setAgPos(5, 37, 19);
-		model.setAgPos(6, 19, 4);
-		model.setAgPos(7, 35, 19);
-		model.setAgPos(8, 19, 6);
-		model.setAgPos(9, 31, 19);
 		
+		// North->South
+		model.setAgPos(0, 19, 0);
+		model.setAgPos(4, 19, 1);
+		model.setAgPos(8, 19, 2);
+		model.setAgPos(12, 19, 4);
+		model.setAgPos(16, 19, 8);
+		/*model.setAgPos(20, 19, 9);
+		model.setAgPos(24, 19, 11);*/
+		
+		// East->West
+		model.setAgPos(1, 38, 19);
+		model.setAgPos(5, 37, 19);
+		model.setAgPos(9, 36, 19);
+		model.setAgPos(13, 35, 19);
+		model.setAgPos(17, 32, 19);
+		/*model.setAgPos(21, 29, 19);
+		model.setAgPos(25, 28, 19);
+		model.setAgPos(29, 26, 19);*/
+		
+		// South->North
+		model.setAgPos(2, 20, 39);
+		model.setAgPos(6, 20, 38);
+		model.setAgPos(10, 20, 35);
+		model.setAgPos(14, 20, 34);
+		model.setAgPos(18, 20, 30);
+		
+		// West->East
+		model.setAgPos(3, 0, 20);
+		model.setAgPos(7, 1, 20);
+		model.setAgPos(11, 4, 20);
+		model.setAgPos(15, 6, 20);
+		model.setAgPos(19, 7, 20);
+		/*model.setAgPos(23, 9, 20);*/
+		
+		// Ambulance
+		model.setAgPos(20, 39, 19);
+		
+		// Possible routes
 		IntersectionController.Move[] path0 = {IntersectionController.Move.NORTH, IntersectionController.Move.SOUTH};
 		IntersectionController.Move[] path1 = {IntersectionController.Move.EAST, IntersectionController.Move.WEST};
+		IntersectionController.Move[] path2 = {IntersectionController.Move.SOUTH, IntersectionController.Move.NORTH};
+		IntersectionController.Move[] path3 = {IntersectionController.Move.WEST, IntersectionController.Move.EAST};
 		
-		for(int i = 0; i < 10; ++i) {
-			if(i % 2 == 0) {
+		// Car routes
+		for(int i = 0; i < 20; ++i) {
+			if(i % 4 == 0) {
 				sourceDestMap.put(i, path0);
 			}
-			else {
+			else if(i % 4 == 1) {
 				sourceDestMap.put(i, path1);
 			}
+			else if(i % 4 == 2) {
+				sourceDestMap.put(i, path2);
+			}
+			else if(i % 4 == 3) {
+				sourceDestMap.put(i, path3);
+			}
 		}
+		
+		// Ambulance route
+		sourceDestMap.put(20, path1);
 		
 		/*model.setAgPos(1, 1, 10);
 		model.setAgPos(2, 2, 10);
@@ -237,7 +281,7 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(4, 4, 10);
 		model.setAgPos(5, 5, 10);*/
 		AGENT_NUMS = new HashMap<>();
-		AGENT_NUMS.put("car", 10);
+		AGENT_NUMS.put("car", 20);
 		//Pedestrians
 		/*model.setAgPos(6, 6, 10);
 		model.setAgPos(7, 7, 10);
@@ -245,7 +289,7 @@ public class WorldModel extends GridWorldModel {
 		AGENT_NUMS.put("pedestrian", 0);
 		//Ambulance
 		//model.setAgPos(9, 9, 10);
-		AGENT_NUMS.put("ambulance", 0);
+		AGENT_NUMS.put("ambulance", 1);
 		
 		for(int i = 0; i < height; ++i) {
 			model.add(WorldModel.ROAD, width/2-1, i);
