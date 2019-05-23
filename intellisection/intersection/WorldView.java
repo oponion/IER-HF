@@ -158,6 +158,12 @@ public class WorldView extends GridWorldView {
 		case WorldModel.ROAD:
             drawRoad(g, x, y);
             break;
+		case WorldModel.TRAFFIC_LIGHT_H:
+            drawHorizontalLight(g, x, y);
+            break;
+		case WorldModel.TRAFFIC_LIGHT_V:
+            drawVerticalLight(g, x, y);
+            break;
         }
     }
 
@@ -225,6 +231,27 @@ public class WorldView extends GridWorldView {
         g.setColor(new Color(217, 219, 221, 60));
         g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
         
+    }
+	
+	public void drawHorizontalLight(Graphics g, int x, int y) {
+        if(model.isHorizontalLightGreen()) {
+			g.setColor(Color.green);
+		}
+		else {
+			g.setColor(Color.red);
+		}
+        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
+        
+    }
+	
+	public void drawVerticalLight(Graphics g, int x, int y) {
+        if(model.isVerticalLightGreen()) {
+			g.setColor(Color.green);
+		}
+		else {
+			g.setColor(Color.red);
+		}
+        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
     }
 
     public static void main(String[] args) throws Exception {

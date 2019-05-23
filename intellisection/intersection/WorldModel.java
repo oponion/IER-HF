@@ -17,6 +17,8 @@ public class WorldModel extends GridWorldModel {
     public static final int BROADCAST_CELL = 32;
     public static final int EMERGENCY_LANE = 64;
 	public static final int ROAD = 128;
+	public static final int TRAFFIC_LIGHT_H = 256;
+	public static final int TRAFFIC_LIGHT_V = 512;
 	
 	public static HashMap<String, Integer> AGENT_NUMS;
 
@@ -31,6 +33,25 @@ public class WorldModel extends GridWorldModel {
     private Logger            logger   = Logger.getLogger("intellisection.mas2j." + WorldModel.class.getName());
 
     private String            id = "WorldModel";
+	
+	private boolean verticalLightGreen;
+	private boolean horizontalLightGreen;
+	
+	public boolean isVerticalLightGreen() {
+		return verticalLightGreen;
+	}
+	
+	public boolean isHorizontalLightGreen() {
+		return horizontalLightGreen;
+	}
+	
+	public void setVerticalLightGreen(boolean val) {
+		verticalLightGreen = val;
+	}
+	
+	public void setHorizontalLightGreen(boolean val) {
+		horizontalLightGreen = val;
+	}
 
     // singleton pattern
     protected static WorldModel model = null;
@@ -225,6 +246,24 @@ public class WorldModel extends GridWorldModel {
         return true;
     }
 	
+	public boolean setLights(String state) {
+		switch(state) {
+			case "south_north":
+				setVerticalLightGreen(true);
+				setHorizontalLightGreen(false);
+				return true;
+			case "west_east":
+				setVerticalLightGreen(false);
+				setHorizontalLightGreen(true);
+				return true;
+			case "none":
+				setVerticalLightGreen(false);
+				setHorizontalLightGreen(false);
+				return true;
+		}
+		return false;
+	}
+	
 	static String getTypeFromId(int agentId) {
 		if(agentId < model.AGENT_NUMS.get("car")) {
 			return "car";
@@ -368,6 +407,12 @@ public class WorldModel extends GridWorldModel {
 		trafficLightLocations.put(IntersectionController.Move.SOUTH, new Location(20, 23));
 		trafficLightLocations.put(IntersectionController.Move.WEST, new Location(16, 20));
 		trafficLightLocations.put(IntersectionController.Move.NORTH, new Location(19, 16));
+		
+		// Only for visualisation
+		model.add(WorldModel.TRAFFIC_LIGHT_H, 25, 17);
+		model.add(WorldModel.TRAFFIC_LIGHT_V, 22, 25);
+		model.add(WorldModel.TRAFFIC_LIGHT_H, 14, 22);
+		model.add(WorldModel.TRAFFIC_LIGHT_V, 17, 14);
 		
         return model;
     }

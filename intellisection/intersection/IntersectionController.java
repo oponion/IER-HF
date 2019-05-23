@@ -128,9 +128,28 @@ public class IntersectionController extends jason.environment.Environment {
 					e.printStackTrace();
 				}
 				
+            } else if (action.getFunctor().equals("set_lights")) {
+				
+				String state = action.getTerm(0).toString();
+				
+				try {
+					
+					result = model.setLights(state);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
             } else {
                 logger.info("executing: " + action + ", but not implemented!");
             }
+			if(agentId == -1) {
+				view.update(25, 17);
+				view.update(22, 25);
+				view.update(14, 22);
+				view.update(17, 14);
+				return true;
+			}
             if (result) {
                 updateAgPercept(getAgentNameById(agentId), agentId);
                 return true;
