@@ -17,7 +17,7 @@ green(west_east).
 
 
 +!seamless_traffic
-	: (green(west_east) | last_green(west_east)) & nobody_inside
+	: (green(west_east) | last_green(west_east)) & nobody_inside & not ambulance_coming
 	<- .broadcast(untell,green(west_east));
 	   .broadcast(tell,green(south_north));
 	   set_lights(south_north);
@@ -29,7 +29,7 @@ green(west_east).
 	
 
 +!seamless_traffic
-	:  (green(south_north) | last_green(south_north)) & nobody_inside
+	:  (green(south_north) | last_green(south_north)) & nobody_inside & not ambulance_coming
 	<- .broadcast(untell,green(south_north));
 	   .broadcast(tell,green(west_east));
 	   set_lights(west_east);
@@ -40,13 +40,14 @@ green(west_east).
 	   !seamless_traffic.
 	   
 +!seamless_traffic
-	: 	not nobody_inside & (green(D) | last_green(D))
+	: 	(not nobody_inside | not ambulance_coming) & (green(D) | last_green(D))
 	<-	.broadcast(untell,green(south_north));
 		.broadcast(untell,green(west_east));
 		set_lights(none);
 		-green(south_north);
 		-green(west_east);
 		+last_green(D);
+		.wait(100);
 		!seamless_traffic.
 
 -!seamless_traffic
