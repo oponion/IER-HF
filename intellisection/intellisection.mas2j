@@ -14,7 +14,7 @@ MAS intellisection {
 
     infrastructure: Centralised
 	
-	environment: intersection.IntersectionController(1,200,yes,"intellisection.mas2j")
+	environment: intersection.IntersectionController(1,100,yes,"intellisection.mas2j")
 
     agents:
         pedestrian;

@@ -167,7 +167,7 @@ public class WorldView extends GridWorldView {
 			super.drawAgent(g, x, y, Color.blue, -1);
 			Color labelColor = Color.white;
 			g.setColor(labelColor);
-			drawString(g, x, y, defaultFont, "c");
+			drawString(g, x, y, defaultFont, "c" + (id + 1));
 		}
 		else if(id < model.AGENT_NUMS.get("car") + model.AGENT_NUMS.get("pedestrian")) {
 			super.drawAgent(g, x, y, Color.green, -1);

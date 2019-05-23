@@ -200,21 +200,30 @@ public class IntersectionController extends jason.environment.Environment {
         // its location
         Location l = model.getAgPos(ag);
         addPercept(agName, Literal.parseLiteral("pos(" + l.x + "," + l.y + ")"));
-
-        // what's around
-        updateAgPercept(agName, l.x - 1, l.y - 1);
-        updateAgPercept(agName, l.x - 1, l.y);
-        updateAgPercept(agName, l.x - 1, l.y + 1);
-        updateAgPercept(agName, l.x, l.y - 1);
-        updateAgPercept(agName, l.x, l.y);
-        updateAgPercept(agName, l.x, l.y + 1);
-        updateAgPercept(agName, l.x + 1, l.y - 1);
-        updateAgPercept(agName, l.x + 1, l.y);
-        updateAgPercept(agName, l.x + 1, l.y + 1);
 		
 		String source = model.sourceDestMap.get(ag)[0].toString().toLowerCase();
 		String dest = model.sourceDestMap.get(ag)[1].toString().toLowerCase();
 		addPercept(agName, Literal.parseLiteral("route(" + source + "," + dest + ")"));
+		
+		// what's around (only relevant fields)
+		switch(dest) {
+			case "north":
+				updateAgPercept(agName, l.x, l.y - 1);		// ^
+				updateAgPercept(agName, l.x, l.y);			// o
+				updateAgPercept(agName, l.x + 1, l.y);		// >
+			case "east":
+				updateAgPercept(agName, l.x, l.y);			// o
+				updateAgPercept(agName, l.x + 1, l.y);		// >
+				updateAgPercept(agName, l.x, l.y + 1);		// ˇ
+			case "south":
+				updateAgPercept(agName, l.x, l.y);			// o
+				updateAgPercept(agName, l.x, l.y + 1);		// ˇ
+				updateAgPercept(agName, l.x - 1, l.y);		// <
+			case "west":
+				updateAgPercept(agName, l.x, l.y);			// o
+				updateAgPercept(agName, l.x, l.y - 1);		// ^
+				updateAgPercept(agName, l.x - 1, l.y);		// <
+		}
 		
 		if(model.getTypeFromId(ag).equals("car")) {
 			Location trafficLightLocation = model.getTrafficLightLocation(l);
