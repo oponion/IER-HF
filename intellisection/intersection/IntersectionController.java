@@ -2,9 +2,7 @@ package intersection;
 
 // Environment code for project jasonTeamSimLocal.mas2j
 
-import jason.asSyntax.Literal;
-import jason.asSyntax.Structure;
-import jason.asSyntax.Term;
+import jason.asSyntax.*;
 import jason.environment.grid.Location;
 import jason.mas2j.*;
 
@@ -102,6 +100,29 @@ public class IntersectionController extends jason.environment.Environment {
 				try {
 					
 					result = model.moveTowards(destination, agentId);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+            }
+			else if (action.getFunctor().equals("move_aside")) {
+				try {
+					
+					result = model.moveAside(agentId);
+					
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+            }
+			else if (action.getFunctor().equals("move_to")) {
+				int toX = (int)((NumberTerm)action.getTerm(0)).solve();
+				int toY = (int)((NumberTerm)action.getTerm(1)).solve();
+				
+				try {
+					
+					result = model.moveTo(toX, toY, agentId);
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -244,7 +265,34 @@ public class IntersectionController extends jason.environment.Environment {
 		}
 		if (model.hasObject(WorldModel.AGENT, x, y)) {
 			if(getAgentNameById(model.getAgAtPos(x, y)).equals("ambulance")) {
-				addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",ambulance)"));
+				boolean ambulance_behind = false;
+				switch(model.sourceDestMap.get(getAgIdBasedOnName(agName))[1]){
+					case NORTH:
+						if(y > model.getAgPos(getAgIdBasedOnName(agName)).y) {
+							ambulance_behind = true;
+						}
+						break;
+					case EAST:
+						if(x < model.getAgPos(getAgIdBasedOnName(agName)).x) {
+							ambulance_behind = true;
+						}
+						break;
+					case SOUTH:
+						if(y < model.getAgPos(getAgIdBasedOnName(agName)).y) {
+							ambulance_behind = true;
+						}
+						break;
+					case WEST:
+						if(x > model.getAgPos(getAgIdBasedOnName(agName)).x) {
+							ambulance_behind = true;
+						}
+						break;
+					default:
+						break;
+				}
+				if(ambulance_behind) {
+				addPercept(agName, Literal.parseLiteral("ambulance_behind"));
+				}
 			}
 			else {
 				addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",agent)"));

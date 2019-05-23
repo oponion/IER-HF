@@ -2,7 +2,6 @@
 
 /* Initial beliefs and rules */
 
-//TODO megjegyezni, hogy elozo lepesben bent volt-e, es attol fuggoen dumalni a central_control_unitnak
 inside :- pos(X,Y) & cell(X,Y,broadcast).
 
 going_towards_traffic_light.
@@ -88,5 +87,47 @@ going_towards_traffic_light.
 	: true
 	<- +my_source(Source);
 	   +my_dest(Dest).
+	   
++ambulance_behind
+	:	true & pos(X,Y)
+	<-	+last_position(X,Y);
+		.drop_all_intentions;
+		move_aside;
+		-ambulance_behind.
+
+-ambulance_behind
+	:	true
+	<-	!continue.
+	
++!continue
+	:	not (last_position(X,Y) & pos(X,Y)) & last_position(U,V)
+	<-	.wait(500);
+		move_to(U,V);
+		.my_name(N);
+		.print(N,_tried_move_to,U,_V);
+		//!move_back.
+		!continue.
+		
+-!continue
+	:	true
+	<-	!continue.
+/*		
++!move_back
+	:	last_position(U,V)
+	<-	move_to(U,V);
+		.my_name(N);
+		.print(N,_tried_move_to,U,_V);
+		!continue.
+*/	
++!continue
+	:	last_position(X,Y) & pos(X,Y) & going_towards_traffic_light
+	<-	-last_position(_,_);
+		!go_to_traffic_light.
+		
++!continue
+	:	last_position(X,Y) & pos(X,Y) & going_towards_destination
+	<-	-last_position(_,_);
+		!go_to_destination.
+		
 
 

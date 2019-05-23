@@ -166,6 +166,37 @@ public class WorldModel extends GridWorldModel {
         }
         return true;
 	}
+	
+	boolean moveTo(int x, int y, int agentId) {
+		if(isFree(x, y)) {
+			setAgPos(agentId, x, y);
+			return true;
+		}
+		return false;
+	}
+	
+	boolean moveAside(int agentId) {
+		Move dir = sourceDestMap.get(agentId)[1];
+		try{
+			
+			switch(dir) {
+				case NORTH:
+					return move(Move.EAST, agentId);
+				case EAST:
+					return move(Move.SOUTH, agentId);
+				case SOUTH:
+					return move(Move.WEST, agentId);
+				case WEST:
+					return move(Move.NORTH, agentId);
+				default:
+					return false;
+			}
+		} catch (Exception e) {
+			logger.warning("Error occured during moveAside: " + e);
+			e.printStackTrace();
+		}
+		return false;
+	}
 
     boolean move(Move dir, int ag) throws Exception {
         Location l = getAgPos(ag);
