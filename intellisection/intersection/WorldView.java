@@ -38,106 +38,52 @@ public class WorldView extends GridWorldView {
         repaint();
     }
 
-    public void setEnv(IntersectionController env) {
-        this.env = env;
-        scenarios.setSelectedIndex(env.getSimId()-1);
-    }
-
-    JLabel    jlMouseLoc;
-    JComboBox scenarios;
-    JSlider   jSpeed;
-    JLabel    jGoldsC;
-	JButton   addCarNorth;
-	JButton   addCarEast;
-	JButton   addCarSouth;
-	JButton   addCarWest;
+    JComboBox speedSelection;
 
     @Override
     public void initComponents(int width) {
         super.initComponents(width);
-        scenarios = new JComboBox();
-        for (int i=1; i<=3; i++) {
-            scenarios.addItem(i);
-        }
+        speedSelection = new JComboBox();
+        speedSelection.addItem("slow");
+		speedSelection.addItem("medium");
+		speedSelection.addItem("fast");
         JPanel args = new JPanel();
         args.setLayout(new BoxLayout(args, BoxLayout.Y_AXIS));
 
         JPanel sp = new JPanel(new FlowLayout(FlowLayout.LEFT));
         sp.setBorder(BorderFactory.createEtchedBorder());
-        sp.add(new JLabel("Scenario:"));
-        sp.add(scenarios);
-
-        jSpeed = new JSlider();
-        jSpeed.setMinimum(0);
-        jSpeed.setMaximum(400);
-        jSpeed.setValue(50);
-        jSpeed.setPaintTicks(true);
-        jSpeed.setPaintLabels(true);
-        jSpeed.setMajorTickSpacing(100);
-        jSpeed.setMinorTickSpacing(20);
-        jSpeed.setInverted(true);
-        Hashtable<Integer,Component> labelTable = new Hashtable<Integer,Component>();
-        labelTable.put( 0, new JLabel("max") );
-        labelTable.put( 200, new JLabel("speed") );
-        labelTable.put( 400, new JLabel("min") );
-        jSpeed.setLabelTable( labelTable );
-        JPanel p = new JPanel(new FlowLayout());
-        p.setBorder(BorderFactory.createEtchedBorder());
-        p.add(jSpeed);
+        sp.add(new JLabel("Speed:"));
+        sp.add(speedSelection);
 
         args.add(sp);
-        args.add(p);
-
-        JPanel msg = new JPanel();
-        msg.setLayout(new BoxLayout(msg, BoxLayout.Y_AXIS));
-        msg.setBorder(BorderFactory.createEtchedBorder());
-
-        p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        msg.add(p);
-        p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        p.add(new JLabel("(mouse at:"));
-        jlMouseLoc = new JLabel("0,0)");
-        p.add(jlMouseLoc);
-        msg.add(p);
-        p = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        jGoldsC = new JLabel("0");
-        p.add(jGoldsC);
-        msg.add(p);
 
         JPanel s = new JPanel(new BorderLayout());
         s.add(BorderLayout.WEST, args);
-        s.add(BorderLayout.CENTER, msg);
         getContentPane().add(BorderLayout.SOUTH, s);
 
-        // Events handling
-        jSpeed.addChangeListener(new ChangeListener() {
-            public void stateChanged(ChangeEvent e) {
-                if (env != null) {
-                    env.setSleep((int)jSpeed.getValue());
-                }
-            }
-        });
-
-        scenarios.addItemListener(new ItemListener() {
+        speedSelection.addItemListener(new ItemListener() {
             public void itemStateChanged(ItemEvent ievt) {
-                int w = ((Integer)scenarios.getSelectedItem()).intValue();
-                if (env != null && env.getSimId() != w) {
-                    env.endSimulation();
-                    env.initWorld(w);
+                String speed = ((String)speedSelection.getSelectedItem());
+                if (env != null) {
+                    switch(speed) {
+						case "fast":
+							env.setSleep(20);
+							break;
+						case "medium":
+							env.setSleep(100);
+							break;
+						case "slow":
+							env.setSleep(400);
+							break;
+					}
+						
                 }
             }
         });
-
-        getCanvas().addMouseMotionListener(new MouseMotionListener() {
-            public void mouseDragged(MouseEvent e) { }
-            public void mouseMoved(MouseEvent e) {
-                int col = e.getX() / cellSizeW;
-                int lin = e.getY() / cellSizeH;
-                if (col >= 0 && lin >= 0 && col < getModel().getWidth() && lin < getModel().getHeight()) {
-                    jlMouseLoc.setText(col+","+lin+")");
-                }
-            }
-        });
+    }
+	
+	public void setEnv(IntersectionController env) {
+        this.env = env;
     }
 
     @Override
@@ -147,10 +93,10 @@ public class WorldView extends GridWorldView {
             drawCrossing(g, x, y);
             break;
         case WorldModel.CRITICAL_CELL:
-            drawCritical(g, x, y);
+            //drawCritical(g, x, y);
             break;
         case WorldModel.BROADCAST_CELL:
-            drawBroadcast(g, x, y);
+            //drawBroadcast(g, x, y);
             break;
 		case WorldModel.EMERGENCY_LANE:
             drawEmergency(g, x, y);

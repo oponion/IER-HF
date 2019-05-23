@@ -123,7 +123,6 @@ public class WorldModel extends GridWorldModel {
 			}
 		}
 		else if(getTypeFromId(agentId).equals("pedestrian")) {
-			logger.warning("PEDESTRIAN");
 			switch(sourceDestMap.get(agentId)[1]) {
 			case NORTH:
 				return new Location(17, -100);
@@ -161,7 +160,6 @@ public class WorldModel extends GridWorldModel {
 			return false;
 		}
 		try{
-			
 			if(dest.y == agentLocation.y) {
 				if(dest.x - agentLocation.x > 0) {
 					move(Move.EAST, agId);
@@ -183,9 +181,7 @@ public class WorldModel extends GridWorldModel {
 			e.printStackTrace();
 		}
 		
-		// repaint
         if (view != null) {
-			//view.repaint();
             view.update(oldLocation.x, oldLocation.y);
             view.update(agentLocation.x, agentLocation.y);
         }
@@ -280,7 +276,7 @@ public class WorldModel extends GridWorldModel {
 		}
 	}
 
-    static WorldModel world1() throws Exception {
+    static WorldModel world() throws Exception {
 		int height = 40;
 		int width = 40;
 		int numOfAgents = 25;
@@ -293,8 +289,6 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(8, 19, 2);
 		model.setAgPos(12, 19, 4);
 		model.setAgPos(16, 19, 8);
-		/*model.setAgPos(20, 19, 9);
-		model.setAgPos(24, 19, 11);*/
 		
 		// East->West
 		model.setAgPos(1, 38, 19);
@@ -302,9 +296,6 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(9, 36, 19);
 		model.setAgPos(13, 35, 19);
 		model.setAgPos(17, 32, 19);
-		/*model.setAgPos(21, 29, 19);
-		model.setAgPos(25, 28, 19);
-		model.setAgPos(29, 26, 19);*/
 		
 		// South->North
 		model.setAgPos(2, 20, 39);
@@ -319,7 +310,6 @@ public class WorldModel extends GridWorldModel {
 		model.setAgPos(11, 4, 20);
 		model.setAgPos(15, 6, 20);
 		model.setAgPos(19, 7, 20);
-		/*model.setAgPos(23, 9, 20);*/
 		
 		// Pedestrians
 		model.setAgPos(20, 22, 16);
@@ -355,20 +345,11 @@ public class WorldModel extends GridWorldModel {
 		// Ambulance route
 		sourceDestMap.put(24, path1);
 		
-		/*model.setAgPos(1, 1, 10);
-		model.setAgPos(2, 2, 10);
-		model.setAgPos(3, 3, 10);
-		model.setAgPos(4, 4, 10);
-		model.setAgPos(5, 5, 10);*/
 		AGENT_NUMS = new HashMap<>();
 		AGENT_NUMS.put("car", 20);
 		//Pedestrians
-		/*model.setAgPos(6, 6, 10);
-		model.setAgPos(7, 7, 10);
-		model.setAgPos(8, 8, 10);*/
 		AGENT_NUMS.put("pedestrian", 4);
 		//Ambulance
-		//model.setAgPos(9, 9, 10);
 		AGENT_NUMS.put("ambulance", 1);
 		
 		for(int i = 0; i < height; ++i) {
@@ -424,16 +405,6 @@ public class WorldModel extends GridWorldModel {
 		model.add(WorldModel.TRAFFIC_LIGHT_H, 14, 22);
 		model.add(WorldModel.TRAFFIC_LIGHT_V, 17, 14);
 		
-        return model;
-    }
-	
-	static WorldModel world2() throws Exception {
-        WorldModel model = WorldModel.create(40, 40, 1);
-        return model;
-    }
-	
-	static WorldModel world3() throws Exception {
-        WorldModel model = WorldModel.create(40, 40, 1);
         return model;
     }
 

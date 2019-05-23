@@ -41,6 +41,10 @@ going_towards_traffic_light.
 	:	green(D) & my_source(S) & .substring(S,D)
 	<-	-waiting_for_green;
 		!go_to_destination.
+		
+-!wait_for_green
+	:	true
+	<-	!wait_for_green.
 	
 +!go_to_destination
 	:	true
@@ -94,6 +98,4 @@ going_towards_traffic_light.
 	:	last_position(X,Y) & pos(X,Y) & going_towards_destination
 	<-	-last_position(_,_);
 		!go_to_destination.
-		
-
 

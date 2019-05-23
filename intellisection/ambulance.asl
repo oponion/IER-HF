@@ -2,6 +2,8 @@
 
 /* Initial beliefs and rules */
 
+
+
 /* Initial goals */
 
 !go_to_hospital.
@@ -14,4 +16,8 @@
 		.send(central_control_unit,tell,ambulance_pos(X,Y));
 		move_towards(hospital);
 		!go_to_hospital.
+	
+-!go_to_hospital
+	:	true
+	<-	!go_to_hospital.
 

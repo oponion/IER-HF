@@ -26,6 +26,10 @@
 	:	true
 	<-	+going_towards_destination;
 		!at(pedestrian,destination).
+		
+-!wait_for_green
+	:	true
+	<-	!wait_for_green.
 
 +route(Source, Dest)
 	: true

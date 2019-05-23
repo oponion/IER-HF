@@ -20,7 +20,7 @@ public class IntersectionController extends jason.environment.Environment {
     WorldView   view;
 
     int     simId    = 3; // type of environment
-    int     nbWorlds = 3;
+    int     numberOfSpeedChoices = 3;
 
     int     sleep    = 0;
     boolean running  = true;
@@ -28,45 +28,15 @@ public class IntersectionController extends jason.environment.Environment {
 
     public static final int SIM_TIME = 60;  // in seconds
 
-    Term north = Literal.parseLiteral("do(north)");
-    Term south = Literal.parseLiteral("do(south)");
-    Term east = Literal.parseLiteral("do(east)");
-    Term west = Literal.parseLiteral("do(west)");
-
     public enum Move {
         NORTH, SOUTH, EAST, WEST
     };
 	
-	
-
     @Override
     public void init(String[] args) {
         hasGUI = args[2].equals("yes");
         sleep  = Integer.parseInt(args[1]);
-        initWorld(Integer.parseInt(args[0]));
-		try {
-		  // parse that file
-		  jason.mas2j.parser.mas2j parser =
-			  new jason.mas2j.parser.mas2j(new FileInputStream(args[3]));
-		  MAS2JProject project = parser.mas();
-
-		  List<String> names = new ArrayList<String>();
-		  // get the names from the project
-		  for (AgentParameters ap : project.getAgents()) {
-			 String agName = ap.name;
-			 for (int cAg = 0; cAg < ap.getNbInstances(); cAg++) {
-				String numberedAg = agName;
-				if (ap.getNbInstances() > 1) {
-				   numberedAg += (cAg + 1);
-				}
-				names.add(numberedAg);
-			 }
-		  }
-		  logger.info("Agents' name: "+names);
-		} catch(Exception e) {
-			logger.warning("Error during init " + e);
-			e.printStackTrace();
-		}
+        initWorld();
     }
 
     public int getSimId() {
@@ -164,7 +134,6 @@ public class IntersectionController extends jason.environment.Environment {
     private int getAgIdBasedOnName(String agName) {
 		
 		if (agName.startsWith("car")) {
-			//return 0;
 			return Integer.parseInt(agName.substring(3, agName.length())) - 1;
 		}
 		if (agName.startsWith("ambulance")) {
@@ -176,40 +145,26 @@ public class IntersectionController extends jason.environment.Environment {
 		return -1;
     }
 
-    public void initWorld(int w) {
-		simId = w;
-        try {
-            switch (w) {
-            case 1:
-                model = WorldModel.world1();
-                break;
-            case 2:
-                model = WorldModel.world2();
-                break;
-            case 3:
-                model = WorldModel.world3();
-                break;
-            default:
-                logger.info("Invalid index!");
-                return;
-			}
-			clearPercepts();
-			addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
-			if (hasGUI) {
-				view = new WorldView(model);
-				view.setEnv(this);
-				model.setView(view);
-			}
-			updateAgsPercept();
-			informAgsEnvironmentChanged();
-        } catch (Exception e) {
-            logger.warning("Error creating world "+e);
-			e.printStackTrace();
-        }
+    public void initWorld() {
+		try{
+			model = WorldModel.world();
+		clearPercepts();
+		addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
+		if (hasGUI) {
+			view = new WorldView(model);
+			view.setEnv(this);
+			model.setView(view);
+		}
+		updateAgsPercept();
+		informAgsEnvironmentChanged();
+		} catch(Exception e) {
+			logger.warning("Error creating world: " + e);
+		}
+		
     }
 
     public void endSimulation() {
-        addPercept(Literal.parseLiteral("end_of_simulation(" + simId + ",0)"));
+        addPercept(Literal.parseLiteral("end_of_simulation(1,0)"));
         informAgsEnvironmentChanged();
         if (view != null) view.setVisible(false);
         WorldModel.destroy();

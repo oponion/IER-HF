@@ -4,6 +4,8 @@
 
 nobody_inside :-
 	.count(inside(_),N) & N == 0.
+	
+
 
 green(west_east).
 
@@ -46,7 +48,8 @@ green(west_east).
 		-green(west_east);
 		+last_green(D);
 		!seamless_traffic.
-		
 
-//+!congestion_control
+-!seamless_traffic
+	:	true
+	<-	!seamless_traffic.
 
