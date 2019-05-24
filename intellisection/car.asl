@@ -67,7 +67,7 @@ going_towards_traffic_light.
 	   +my_dest(Dest).
 	   
 +ambulance_behind
-	:	true & pos(X,Y)
+	:	pos(X,Y)
 	<-	+last_position(X,Y);
 		.drop_all_intentions;
 		move_aside;

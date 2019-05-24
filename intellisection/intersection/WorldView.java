@@ -92,12 +92,6 @@ public class WorldView extends GridWorldView {
         case WorldModel.PEDESTRIAN_CROSSING:
             drawCrossing(g, x, y);
             break;
-        case WorldModel.CRITICAL_CELL:
-            //drawCritical(g, x, y);
-            break;
-        case WorldModel.BROADCAST_CELL:
-            //drawBroadcast(g, x, y);
-            break;
 		case WorldModel.EMERGENCY_LANE:
             drawEmergency(g, x, y);
             break;
@@ -133,31 +127,6 @@ public class WorldView extends GridWorldView {
 			g.setColor(labelColor);
 			drawString(g, x, y, defaultFont, "+");
 		}
-    }
-
-    public void drawCritical(Graphics g, int x, int y) {
-        g.setColor(Color.orange);
-        g.fillRect(x * cellSizeW, y * cellSizeH, cellSizeW, cellSizeH);
-        g.setColor(Color.pink);
-        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
-        g.drawLine(x * cellSizeW + 2, y * cellSizeH + 2, (x + 1) * cellSizeW - 2, (y + 1) * cellSizeH - 2);
-        g.drawLine(x * cellSizeW + 2, (y + 1) * cellSizeH - 2, (x + 1) * cellSizeW - 2, y * cellSizeH + 2);
-    }
-
-    public void drawBroadcast(Graphics g, int x, int y) {
-        g.setColor(Color.yellow);
-        g.drawRect(x * cellSizeW + 2, y * cellSizeH + 2, cellSizeW - 4, cellSizeH - 4);
-        int[] vx = new int[4];
-        int[] vy = new int[4];
-        vx[0] = x * cellSizeW + (cellSizeW / 2);
-        vy[0] = y * cellSizeH;
-        vx[1] = (x + 1) * cellSizeW;
-        vy[1] = y * cellSizeH + (cellSizeH / 2);
-        vx[2] = x * cellSizeW + (cellSizeW / 2);
-        vy[2] = (y + 1) * cellSizeH;
-        vx[3] = x * cellSizeW;
-        vy[3] = y * cellSizeH + (cellSizeH / 2);
-        g.fillPolygon(vx, vy, 4);
     }
 
     public void drawCrossing(Graphics g, int x, int y) {

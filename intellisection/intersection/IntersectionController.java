@@ -19,7 +19,6 @@ public class IntersectionController extends jason.environment.Environment {
     WorldModel  model;
     WorldView   view;
 
-    int     simId    = 3; // type of environment
     int     numberOfSpeedChoices = 3;
 
     int     sleep    = 0;
@@ -37,10 +36,6 @@ public class IntersectionController extends jason.environment.Environment {
         hasGUI = args[2].equals("yes");
         sleep  = Integer.parseInt(args[1]);
         initWorld();
-    }
-
-    public int getSimId() {
-        return simId;
     }
 
     public void setSleep(int s) {
@@ -149,7 +144,6 @@ public class IntersectionController extends jason.environment.Environment {
 		try{
 			model = WorldModel.world();
 		clearPercepts();
-		addPercept(Literal.parseLiteral("gsize(" + simId + "," + model.getWidth() + "," + model.getHeight() + ")"));
 		if (hasGUI) {
 			view = new WorldView(model);
 			view.setEnv(this);
@@ -164,8 +158,6 @@ public class IntersectionController extends jason.environment.Environment {
     }
 
     public void endSimulation() {
-        addPercept(Literal.parseLiteral("end_of_simulation(1,0)"));
-        informAgsEnvironmentChanged();
         if (view != null) view.setVisible(false);
         WorldModel.destroy();
     }
@@ -237,9 +229,6 @@ public class IntersectionController extends jason.environment.Environment {
 
     private void updateAgPercept(String agName, int x, int y) {
         if (model == null || !model.inGrid(x,y)) return;
-		if (model.hasObject(WorldModel.CRITICAL_CELL, x, y)) {
-			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",critical)"));
-		}
 		if (model.hasObject(WorldModel.BROADCAST_CELL, x, y)) {
 			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",broadcast)"));
 		}
@@ -274,16 +263,6 @@ public class IntersectionController extends jason.environment.Environment {
 				addPercept(agName, Literal.parseLiteral("ambulance_behind"));
 				}
 			}
-			else {
-				addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",agent)"));
-			}
-		}
-		if (model.hasObject(WorldModel.PEDESTRIAN_CROSSING, x, y)) {
-			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",crossing)"));
-		}
-		if (model.hasObject(WorldModel.EMERGENCY_LANE, x, y)) {
-			addPercept(agName, Literal.parseLiteral("cell(" + x + "," + y + ",emergency)"));
 		}
     }
-
 }

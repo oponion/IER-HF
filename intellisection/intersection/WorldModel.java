@@ -12,8 +12,7 @@ import intersection.IntersectionController.Move;
 
 public class WorldModel extends GridWorldModel {
 
-	public static final int PEDESTRIAN_CROSSING = 8;
-    public static final int CRITICAL_CELL  = 16;
+	public static final int PEDESTRIAN_CROSSING = 16;
     public static final int BROADCAST_CELL = 32;
     public static final int EMERGENCY_LANE = 64;
 	public static final int ROAD = 128;
@@ -383,12 +382,6 @@ public class WorldModel extends GridWorldModel {
 		for(int i = height/2-2; i <= height/2+1; ++i) {
 			for(int j = width/2-2; j <= width/2+1; ++j) {
 				model.add(WorldModel.BROADCAST_CELL, j, i);
-			}
-		}
-		
-		for(int i = height/2-1; i <= height/2; ++i) {
-			for(int j = width/2-1; j <= width/2; ++j) {
-				model.add(WorldModel.CRITICAL_CELL, j, i);
 			}
 		}
 		
